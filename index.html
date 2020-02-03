@@ -159,9 +159,13 @@ class Game {
         this._keyLeftMatch = new Array(rows).fill(false);
         this._keyTopMatch = new Array(cols).fill(false);
 
-        for (let i = 0; i < cols * rows; i++) {
-            data.cells[i] = (Math.random()*high|0)+low;
+        do {
+            // create patches with random numbers.
+            for (let i = 0; i < cols * rows; i++) {
+                data.cells[i] = (Math.random()*high|0)+low;
+            }
         }
+        while (this._containsSingleValueRect(data.cells, cols, rows));
 
         // determine solution.
         const num = (Math.random() * (keyNumThHigh - keyNumThLow) + keyNumThLow) * (cols * rows) | 0;
@@ -255,6 +259,26 @@ class Game {
         }
 
         return completed;
+    }
+
+    _containsSingleValueRect(cells, cols, rows) {
+        for (let i0 = 0; i0 < rows-1; i0++) {
+            for (let i1 = i0+1; i1 < rows; i1++) {
+                for (let j0 = 0; j0 < cols-1; j0++) {
+                    for (let j1 = j0+1; j1 < cols; j1++) {
+                        const c0 = cells[i0*cols+j0];
+                        const c1 = cells[i0*cols+j1];
+                        const c2 = cells[i1*cols+j0];
+                        const c3 = cells[i1*cols+j1];
+                        if (c0==c1 && c1==c2 && c2==c3) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     _shuffle(array) {
