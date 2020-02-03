@@ -155,13 +155,12 @@ class Game {
             keyRight: []
         };
 
-        this._cellStates = [];
-        this._keyLeftMatch = [];
-        this._keyTopMatch = [];
+        this._cellStates = new Array(cols * rows).fill(CELL_NONE);
+        this._keyLeftMatch = new Array(rows).fill(false);
+        this._keyTopMatch = new Array(cols).fill(false);
 
         for (let i = 0; i < cols * rows; i++) {
             data.cells[i] = (Math.random()*high|0)+low;
-            this._cellStates[i] = CELL_NONE;
         }
 
         // determine solution.
@@ -170,13 +169,11 @@ class Game {
         for (let i = 0; i < rows; i++) {
             data.keyLeft[i] = 0
             data.keyRight[i] = 0
-            this._keyLeftMatch[i] = false;
         }
 
         for (let j = 0; j < cols; j++) {
             data.keyTop[j] = 0
             data.keyBottom[j] = 0;
-            this._keyTopMatch[j] = false;
         }
 
         // first, activate one cell every row and column.
